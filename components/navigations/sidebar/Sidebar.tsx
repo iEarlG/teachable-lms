@@ -1,5 +1,6 @@
+
 import { SidebarLogo } from "@/components/navigations/sidebar/SidebarLogo";
-import { SidebarRoutes } from "./SidebarRoutes";
+import { SidebarRoutes } from "@/components/navigations/sidebar/SidebarRoutes";
 
 export const Sidebar = () => {
     return (
