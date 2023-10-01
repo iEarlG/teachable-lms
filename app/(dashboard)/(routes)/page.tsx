@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <div>
-      This is route page
+      This is route dashboard
     </div>
   )
 };
