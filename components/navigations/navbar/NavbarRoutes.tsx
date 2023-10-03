@@ -10,7 +10,6 @@ import Link from "next/link";
 
 export const NavbarRoutes = () => {
     const pathname = usePathname();
-    const router = useRouter();
 
     const isTeacherPage = pathname?.startsWith("/teacher");
     const isChapterPage = pathname?.includes("/chapter");

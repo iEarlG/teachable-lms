@@ -5,10 +5,10 @@ export const SidebarLogo = () => {
     return (
         <div>
             <Image 
-                src="/logo.svg"
+                src="/teachable.svg"
                 alt="Logo"
-                width={130}
-                height={130}
+                width={200}
+                height={150}
             />
         </div>
     )
