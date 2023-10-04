@@ -7,8 +7,10 @@ import { LayoutDashboard } from "lucide-react";
 import { db } from "@/lib/db";
 
 import { IconBadge } from "@/components/ui/IconBadge";
+
 import { TitleForm } from "@/components/courses/TitleForm";
 import { DescriptionForm } from "@/components/courses/DescriptionForm";
+import { ImageForm } from "@/components/courses/ImageForm";
 
 const CourseIdPage = async ({ 
     params 
@@ -62,6 +64,10 @@ const CourseIdPage = async ({
                         courseId={course.id}
                     />
                     <DescriptionForm
+                        initialData={course}
+                        courseId={course.id}
+                    />
+                    <ImageForm
                         initialData={course}
                         courseId={course.id}
                     />
