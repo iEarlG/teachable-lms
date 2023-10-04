@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 
 import { IconBadge } from "@/components/ui/IconBadge";
 import { TitleForm } from "@/components/courses/TitleForm";
+import { DescriptionForm } from "@/components/courses/DescriptionForm";
 
 const CourseIdPage = async ({ 
     params 
@@ -57,6 +58,10 @@ const CourseIdPage = async ({
                         <h2 className="text-xl">Customize your course</h2>
                     </div>
                     <TitleForm 
+                        initialData={course}
+                        courseId={course.id}
+                    />
+                    <DescriptionForm
                         initialData={course}
                         courseId={course.id}
                     />
