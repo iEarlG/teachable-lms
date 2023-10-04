@@ -7,6 +7,7 @@ import { LayoutDashboard } from "lucide-react";
 import { db } from "@/lib/db";
 
 import { IconBadge } from "@/components/ui/IconBadge";
+import { TitleForm } from "@/components/courses/TitleForm";
 
 const CourseIdPage = async ({ 
     params 
@@ -55,6 +56,10 @@ const CourseIdPage = async ({
                         <IconBadge icon={LayoutDashboard} size="md" />
                         <h2 className="text-xl">Customize your course</h2>
                     </div>
+                    <TitleForm 
+                        initialData={course}
+                        courseId={course.id}
+                    />
                 </div>
             </div>
         </div>
