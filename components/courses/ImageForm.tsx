@@ -2,29 +2,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Course } from "@prisma/client";
+import Image from "next/image";
 import toast from "react-hot-toast";
 import * as z from "zod";
 import axios from "axios";
 
-import { Pencil } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ImageIcon, ImagePlus, Pencil } from "lucide-react";
 
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { FileUploader } from "@/components/FileUploader";
 
 interface ImageFormProps {
-    initialData: {
-        description: string;
-    }
+    initialData: Course;
     courseId: string;
 };
 
 const formSchema = z.object({
-    description: z.string().min(1, {
-        message: "Description is required"
+    imageUrl: z.string().min(1, {
+        message: "Image or Video is required"
     })
 });
 
@@ -33,23 +29,17 @@ export const ImageForm = ({
     courseId
 }: ImageFormProps) => {
     const router = useRouter();
-    const [isEditting, setIsEditting] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
-    const toggleEditting = () => {
-        setIsEditting((current) => !current)
+    const toggleEditing = () => {
+        setIsEditing((current) => !current)
     };
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: initialData
-    });
-
-    const { isSubmitting, isValid } = form.formState;
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
                 await axios.patch(`/api/courses/${courseId}`, values);
                 toast.success("Course description updated successfully.");
-                toggleEditting();
+                toggleEditing();
                 router.refresh();
             } catch (error) {
                 toast.error("Something went wrong while updating the description, please try again.")
@@ -59,53 +49,57 @@ export const ImageForm = ({
     return ( 
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="flex items-center justify-between font-medium">
-                Course description
-                <Button variant="ghost" onClick={toggleEditting}>
-                    {isEditting ? (
-                        <span className="text-slate-600">Cancel</span>
-                    ): (
+                Course Image
+                <Button variant="ghost" onClick={toggleEditing}>
+                    {isEditing && (
                         <>
-                            <Pencil className="w-4 h-4 mr-2" />
-                            <span className="text-slate-600">Edit description</span>
+                            <span className="text-slate-600">Cancel</span>
                         </>
                     )}
-                    
+                    {!isEditing && !initialData.imageUrl && (
+                        <>
+                            <ImagePlus className="h-4 w-4 mr-2" />
+                            <span className="text-slate-600">Add an image</span>
+                        </>
+                    )}
+                    {!isEditing && initialData.imageUrl && (
+                        <>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            <span className="text-slate-600">Edit Image</span>
+                        </>
+                    )}
                 </Button>
             </div>
-            {!isEditting ? (
-                <p className={cn(
-                    "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
-                )}>
-                    {initialData.description || "No description provided."}
-                </p>
-            ) : (
-                <Form {...form}>
-                    <form
-                        className="space-y-4 mt-4"
-                        onSubmit={form.handleSubmit(onSubmit)}
-                    >
-                        <FormField 
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Textarea 
-                                            placeholder="e.g This course will teach you how to build a fullstack application using Next.js and Prisma."
-                                            {...field}
-                                            disabled={isSubmitting}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+            {!isEditing && (
+                !initialData.imageUrl ? (
+                    <div className="flex items-center justify-center h-60 rounded-md bg-slate-200">
+                        <ImageIcon className="h-10 w-10 text-slate-500" />
+                    </div>
+                ) : (
+                    <div className="relative aspect-video mt-2">
+                        <Image 
+                            src={initialData.imageUrl}
+                            alt="Course Image Upload"
+                            className="object-cover rounded-md"
+                            fill
                         />
-                        <div className="flex items-center gap-x-2">
-                            <Button disabled={!isValid || isSubmitting} type="submit">Save</Button>
-                        </div>
-                    </form>
-                </Form>
+                    </div>
+                )
+            )}
+            {isEditing && (
+                <div>
+                    <FileUploader 
+                        endpoint="courseImage"
+                        onChange={(url) => {
+                            if (url) {
+                                onSubmit({imageUrl: url});
+                            }
+                        }}
+                    />
+                    <div className="text-xs text-muted-foreground mt-4">
+                        16:9 aspect ratio recommended
+                    </div>
+                </div>
             )}
         </div>
     );
