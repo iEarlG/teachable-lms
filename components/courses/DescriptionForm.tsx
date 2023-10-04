@@ -32,10 +32,10 @@ export const DescriptionForm = ({
     courseId
 }: DescriptionFormProps) => {
     const router = useRouter();
-    const [isEditting, setIsEditting] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
-    const toggleEditting = () => {
-        setIsEditting((current) => !current)
+    const toggleEditing = () => {
+        setIsEditing((current) => !current)
     };
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -50,7 +50,7 @@ export const DescriptionForm = ({
             try {
                 await axios.patch(`/api/courses/${courseId}`, values);
                 toast.success("Course description updated successfully.");
-                toggleEditting();
+                toggleEditing();
                 router.refresh();
             } catch (error) {
                 toast.error("Something went wrong while updating the description, please try again.")
@@ -61,8 +61,8 @@ export const DescriptionForm = ({
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="flex items-center justify-between font-medium">
                 Course description
-                <Button variant="ghost" onClick={toggleEditting}>
-                    {isEditting ? (
+                <Button variant="ghost" onClick={toggleEditing}>
+                    {isEditing ? (
                         <span className="text-slate-600">Cancel</span>
                     ): (
                         <>
@@ -73,7 +73,7 @@ export const DescriptionForm = ({
                     
                 </Button>
             </div>
-            {!isEditting ? (
+            {!isEditing ? (
                 <p className={cn(
                     "text-sm mt-2",
                     !initialData.description && "text-slate-500 italic"
