@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Course } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -16,9 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 interface DescriptionFormProps {
-    initialData: {
-        description: string;
-    }
+    initialData: Course;
     courseId: string;
 };
 
@@ -41,7 +40,9 @@ export const DescriptionForm = ({
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData
+        defaultValues: {
+            description: initialData?.description || ""
+        }
     });
 
     const { isSubmitting, isValid } = form.formState;
