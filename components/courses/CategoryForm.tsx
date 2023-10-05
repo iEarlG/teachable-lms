@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Combobox } from "@/components/ui/combobox";
 
 interface CategoryFormProps {
     initialData: Course;
@@ -49,6 +49,7 @@ export const CategoryForm = ({
     });
 
     const { isSubmitting, isValid } = form.formState;
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
                 await axios.patch(`/api/courses/${courseId}`, values);
@@ -59,6 +60,8 @@ export const CategoryForm = ({
                 toast.error("Something went wrong while updating the category, please try again.")
             }
     };
+
+    const selectedOptions = options.find((option) => option.value === initialData.categoryId);
     
     return ( 
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -79,9 +82,9 @@ export const CategoryForm = ({
             {!isEditing ? (
                 <p className={cn(
                     "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
+                    !initialData.categoryId && "text-slate-500 italic"
                 )}>
-                    {initialData.description || "No category provided."}
+                    {selectedOptions?.label || "No category provided."}
                 </p>
             ) : (
                 <Form {...form}>
@@ -95,11 +98,10 @@ export const CategoryForm = ({
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Textarea 
-                                            placeholder="e.g This course will teach you how to build a fullstack application using Next.js and Prisma."
+                                        <Combobox 
+                                            options={options}
                                             {...field}
-                                            disabled={isSubmitting}
-                                        />
+                                        />    
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
