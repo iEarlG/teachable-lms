@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import * as z from "zod";
 import axios from "axios";
 
-import { ImageIcon, ImagePlus, Pencil } from "lucide-react";
+import { File, ImageIcon, ImagePlus, Loader2, Pencil, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/FileUploader";
@@ -30,21 +30,35 @@ export const AttachmentsForm = ({
 }: AttachmentsFormProps) => {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
+    const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
 
     const toggleEditing = () => {
         setIsEditing((current) => !current)
     };
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-            try {
-                await axios.post(`/api/courses/${courseId}/attachments`, values);
-                toast.success("Course resources & attachments updated successfully.");
-                toggleEditing();
-                router.refresh();
-            } catch (error) {
-                toast.error("Something went wrong while updating the resources & attachments, please try again.")
-            }
+        try {
+            await axios.post(`/api/courses/${courseId}/attachments`, values);
+            toast.success("Course resources & attachments updated successfully.");
+            toggleEditing();
+            router.refresh();
+        } catch (error) {
+            toast.error("Something went wrong while updating the resources & attachments, please try again.")
+        }
     };
+
+    const onDelete = async (id: string) => {
+        try {
+            setIsDeletingId(id);
+            await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+            toast.success("Resource deleted successfully.");
+            router.refresh();
+        } catch (error) {
+            toast.error("Something went wrong while deleting the resource, please try again.")
+        } finally {
+            setIsDeletingId(null);
+        }
+    }
     
     return ( 
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -68,6 +82,26 @@ export const AttachmentsForm = ({
                 <>
                     {initialData.attachments.length === 0 && (
                         <p className="text-sm mt-2 text-slate-500 italic">No attachments found.</p>
+                    )}
+                    {initialData.attachments.length > 0 && (
+                        <div className="space-y-2">
+                            {initialData.attachments.map((attachment) => (
+                                <div key={attachment.id} className="flex items-center w-full p-3 bg-sky-100 border-sky-200 border text-sky-700 rounded-md">
+                                    <File className="h-4 w-4 mr-2 flex-shrink-0" />
+                                    <p className="text-sm line-clamp-1">{attachment.name}</p>
+                                    {isDeletingId === attachment.id && (
+                                        <div>
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        </div>
+                                    )}
+                                    {isDeletingId !== attachment.id && (
+                                        <button className="ml-auto hover:opacity-75 transition" onClick={() => onDelete(attachment.id)}>
+                                            <X className="h-4 w-4 animate-spin" />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </>
             )}
