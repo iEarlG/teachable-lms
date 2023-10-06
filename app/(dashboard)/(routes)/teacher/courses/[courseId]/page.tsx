@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
 
-import { DollarSign, LayoutDashboard, ListChecks } from "lucide-react";
+import { DollarSign, FileUp, LayoutDashboard, ListChecks } from "lucide-react";
 
 import { db } from "@/lib/db";
 
@@ -13,6 +13,7 @@ import { DescriptionForm } from "@/components/courses/DescriptionForm";
 import { ImageForm } from "@/components/courses/ImageForm";
 import { CategoryForm } from "@/components/courses/CategoryForm";
 import { PriceForm } from "@/components/courses/PriceForm";
+import { AttachmentsForm } from "@/components/courses/AttachmentsForm";
 
 const CourseIdPage = async ({ 
     params 
@@ -102,6 +103,16 @@ const CourseIdPage = async ({
                             <h2 className="text-xl">Sell Courses</h2>
                         </div>
                         <PriceForm 
+                            initialData={course}
+                            courseId={course.id}
+                        />
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                             <IconBadge icon={FileUp} size="md" />
+                            <h2 className="text-xl">Resourcement & Attachments</h2>
+                        </div>
+                        <AttachmentsForm
                             initialData={course}
                             courseId={course.id}
                         />
