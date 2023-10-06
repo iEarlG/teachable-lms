@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
 
-import { LayoutDashboard } from "lucide-react";
+import { DollarSign, LayoutDashboard, ListChecks } from "lucide-react";
 
 import { db } from "@/lib/db";
 
@@ -12,6 +12,7 @@ import { TitleForm } from "@/components/courses/TitleForm";
 import { DescriptionForm } from "@/components/courses/DescriptionForm";
 import { ImageForm } from "@/components/courses/ImageForm";
 import { CategoryForm } from "@/components/courses/CategoryForm";
+import { PriceForm } from "@/components/courses/PriceForm";
 
 const CourseIdPage = async ({ 
     params 
@@ -86,6 +87,25 @@ const CourseIdPage = async ({
                             value: category.id
                         }))}
                     />
+                </div>
+                <div className="space-y-6">
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <IconBadge icon={ListChecks} size="md" />
+                            <h2 className="text-xl">Course Chapters</h2>
+                        </div>
+                        <div>TODO: LIST CHAPTER</div>
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <IconBadge icon={DollarSign} size="md" />
+                            <h2 className="text-xl">Sell Courses</h2>
+                        </div>
+                        <PriceForm 
+                            initialData={course}
+                            courseId={course.id}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
