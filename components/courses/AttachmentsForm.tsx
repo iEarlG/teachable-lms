@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Course } from "@prisma/client";
+import { Attachment, Course } from "@prisma/client";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -14,14 +14,14 @@ import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/FileUploader";
 
 interface AttachmentsFormProps {
-    initialData: Course;
+    initialData: Course  & {
+        attachments: Attachment[]
+    };
     courseId: string;
 };
 
 const formSchema = z.object({
-    imageUrl: z.string().min(1, {
-        message: "Image or Video is required"
-    })
+    url: z.string().min(1),
 });
 
 export const AttachmentsForm = ({
@@ -37,7 +37,7 @@ export const AttachmentsForm = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
-                await axios.patch(`/api/courses/${courseId}`, values);
+                await axios.post(`/api/courses/${courseId}/attachments`, values);
                 toast.success("Course resources & attachments updated successfully.");
                 toggleEditing();
                 router.refresh();
@@ -65,33 +65,24 @@ export const AttachmentsForm = ({
                 </Button>
             </div>
             {!isEditing && (
-                !initialData.imageUrl ? (
-                    <div className="flex items-center justify-center h-60 rounded-md bg-slate-200">
-                        <ImageIcon className="h-10 w-10 text-slate-500" />
-                    </div>
-                ) : (
-                    <div className="relative aspect-video mt-2">
-                        <Image 
-                            src={initialData.imageUrl}
-                            alt="Course Image Upload"
-                            className="object-cover rounded-md"
-                            fill
-                        />
-                    </div>
-                )
+                <>
+                    {initialData.attachments.length === 0 && (
+                        <p className="text-sm mt-2 text-slate-500 italic">No attachments found.</p>
+                    )}
+                </>
             )}
             {isEditing && (
                 <div>
                     <FileUploader 
-                        endpoint="courseImage"
+                        endpoint="courseAttachment"
                         onChange={(url) => {
                             if (url) {
-                                onSubmit({imageUrl: url});
+                                onSubmit({url: url});
                             }
                         }}
                     />
                     <div className="text-xs text-muted-foreground mt-4">
-                        16:9 aspect ratio recommended
+                        Add resources and attachments to your course. That is anything that you want to share with your students, such as PDFs, video, etc.
                     </div>
                 </div>
             )}
