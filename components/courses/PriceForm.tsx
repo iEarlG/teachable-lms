@@ -11,10 +11,11 @@ import axios from "axios";
 
 import { Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/priceformat";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 
 interface PriceFormProps {
     initialData: Course;
@@ -22,9 +23,7 @@ interface PriceFormProps {
 };
 
 const formSchema = z.object({
-    description: z.string().min(1, {
-        message: "Description is required"
-    })
+    price: z.coerce.number(),
 });
 
 export const PriceForm = ({
@@ -41,7 +40,7 @@ export const PriceForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.description || ""
+            price: initialData?.price || undefined
         }
     });
 
@@ -49,25 +48,25 @@ export const PriceForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
                 await axios.patch(`/api/courses/${courseId}`, values);
-                toast.success("Course description updated successfully.");
+                toast.success("Course price updated successfully.");
                 toggleEditing();
                 router.refresh();
             } catch (error) {
-                toast.error("Something went wrong while updating the description, please try again.")
+                toast.error("Something went wrong while updating the price, please try again.")
             }
     };
     
     return ( 
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="flex items-center justify-between font-medium">
-                Course description
+                Course Price
                 <Button variant="ghost" onClick={toggleEditing}>
                     {isEditing ? (
                         <span className="text-slate-600">Cancel</span>
                     ): (
                         <>
                             <Pencil className="w-4 h-4 mr-2" />
-                            <span className="text-slate-600">Edit description</span>
+                            <span className="text-slate-600">Edit Price</span>
                         </>
                     )}
                     
@@ -76,9 +75,15 @@ export const PriceForm = ({
             {!isEditing ? (
                 <p className={cn(
                     "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
+                    !initialData.price && "text-slate-500 italic"
                 )}>
-                    {initialData.description || "No description provided."}
+                    {
+                        initialData.price 
+                    ? 
+                        formatPrice(initialData.price)
+                    : 
+                        "No price set"
+                    }
                 </p>
             ) : (
                 <Form {...form}>
@@ -88,12 +93,14 @@ export const PriceForm = ({
                     >
                         <FormField 
                             control={form.control}
-                            name="description"
+                            name="price"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Textarea 
-                                            placeholder="e.g This course will teach you how to build a fullstack application using Next.js and Prisma."
+                                        <Input 
+                                            type="number"
+                                            step="0.01"
+                                            placeholder="Set a price for your course (in USD)"
                                             {...field}
                                             disabled={isSubmitting}
                                         />
