@@ -70,11 +70,6 @@ export const ChaptersForm = ({
                         <>
                             <UploadCloud className="w-4 h-4 mr-2" />
                             <span className="text-slate-600">Add a chapter</span>
-                            <ChapterLists
-                                onEdit={() => {}}
-                                onReorder={() => {}}
-                                items={initialData.chapters || []}
-                            />
                         </>
                     )}
                     
@@ -113,6 +108,11 @@ export const ChaptersForm = ({
                     {!initialData.chapters.length && (
                         "You haven't added any chapters yet."
                     )}
+                    <ChapterLists
+                        onEdit={() => {}}
+                        onReorder={() => {}}
+                        items={initialData.chapters || []}
+                    />
                 </div>
             )}
             {!isCreating && (
