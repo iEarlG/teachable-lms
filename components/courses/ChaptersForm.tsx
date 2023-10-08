@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import * as z from "zod";
 import axios from "axios";
 
-import { Pencil, UploadCloud } from "lucide-react";
+import { Loader2, Pencil, UploadCloud } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -74,9 +74,18 @@ export const ChaptersForm = ({
             setIsUpdating(false);
         }
     };
+
+    const onEditList = (id: string) => {
+        router.push(`/teacher/courses/${courseId}/chapters/${id}`);
+    };
     
     return ( 
-        <div className="mt-6 border bg-slate-100 rounded-md p-4">
+        <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
+            {isUpdating && (
+                <div className="absolute h-full w-full flex items-center justify-center bg-slate-500/20 top-0 right-0 rounded-md">
+                    <Loader2 className="h-6 w-6 animate-spin text-sky-700" />
+                </div>
+            )}
             <div className="flex items-center justify-between font-medium">
                 Course Chapters
                 <Button variant="ghost" onClick={toggleCreating}>
@@ -125,7 +134,7 @@ export const ChaptersForm = ({
                         "You haven't added any chapters yet."
                     )}
                     <ChapterLists
-                        onEdit={() => {}}
+                        onEdit={onEditList}
                         onReorder={onReorder}   
                         items={initialData.chapters || []}
                     />
