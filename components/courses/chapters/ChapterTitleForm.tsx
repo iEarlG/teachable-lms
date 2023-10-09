@@ -65,7 +65,7 @@ export const ChapterTitleForm = ({
                     ): (
                         <>
                             <Pencil className="w-4 h-4 mr-2" />
-                            <span className="text-slate-600">Edit title</span>
+                            <span className="text-slate-600">Edit Title</span>
                         </>
                     )}
                     
