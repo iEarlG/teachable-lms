@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, LayoutDashboard } from "lucide-react";
 import { IconBadge } from "@/components/ui/IconBadge";
 import { ChapterTitleForm } from "@/components/courses/chapters/ChapterTitleForm";
+import { ChapterDescriptionForm } from "@/components/courses/chapters/ChapterDescriptionForm";
 
 const ChapterIdPage = async ({
     params,
@@ -69,6 +70,11 @@ const ChapterIdPage = async ({
                             <h2 className="text-xl">Customize your Chapters</h2>
                         </div>
                         <ChapterTitleForm 
+                            initialData={chapter}
+                            courseId={params.courseId}
+                            chapterId={params.chapterId}
+                        />
+                        <ChapterDescriptionForm 
                             initialData={chapter}
                             courseId={params.courseId}
                             chapterId={params.chapterId}
