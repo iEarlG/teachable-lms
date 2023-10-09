@@ -12,10 +12,11 @@ import axios from "axios";
 import { Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Editor } from "@/components/Editor";
 import { Preview } from "@/components/Preview";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ChapterAccessSettingsFormProps {
     initialData: Chapter;
@@ -24,7 +25,7 @@ interface ChapterAccessSettingsFormProps {
 };
 
 const formSchema = z.object({
-    description: z.string().min(1),
+    isFree: z.boolean().default(false),
 });
 
 export const ChapterAccessSettingsForm = ({
@@ -42,7 +43,7 @@ export const ChapterAccessSettingsForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.description || ""
+            isFree: Boolean(initialData.isFree),
         }
     });
 
@@ -50,42 +51,45 @@ export const ChapterAccessSettingsForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
             try {
                 await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
-                toast.success("Chapter Description updated successfully.");
+                toast.success("Chapter access settings updated successfully.");
                 toggleEditing();
                 router.refresh();
             } catch (error) {
-                toast.error("Something went wrong while updating the description, please try again.")
+                toast.error("Something went wrong. Please try again.")
             }
     };
     
     return ( 
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="flex items-center justify-between font-medium">
-                Chapter Description
+                Chapter Settings
                 <Button variant="ghost" onClick={toggleEditing}>
                     {isEditing ? (
                         <span className="text-slate-600">Cancel</span>
                     ): (
                         <>
                             <Pencil className="w-4 h-4 mr-2" />
-                            <span className="text-slate-600">Edit Description</span>
+                            <span className="text-slate-600">Edit Access</span>
                         </>
                     )}
                     
                 </Button>
             </div>
             {!isEditing ? (
-                <div className={cn(
+                <p className={cn(
                     "text-sm mt-2",
-                    !initialData.description && "text-slate-500 italic"
+                    !initialData.isFree && "text-slate-500 italic"
                 )}>
-                    {!initialData.description && "No description provided."}
-                    {initialData.description && (
-                        <Preview 
-                            value={initialData.description}
-                        />
-                    )}
-                </div>
+                   {initialData?.isFree ? (
+                    <>
+                        This chapter is free for preview.
+                    </>
+                   ): (
+                    <>
+                        This chapter is not free for preview.
+                    </>
+                   )}
+                </p>
             ) : (
                 <Form {...form}>
                     <form
@@ -94,15 +98,18 @@ export const ChapterAccessSettingsForm = ({
                     >
                         <FormField 
                             control={form.control}
-                            name="description"
+                            name="isFree"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                     <FormControl>
-                                        <Editor
-                                            {...field}
+                                        <Checkbox 
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <div className="space-y-1 leading-none">
+                                        <FormDescription>Check this box if you want this specific chapter to be free for preview.</FormDescription>
+                                    </div>
                                 </FormItem>
                             )}
                         />
