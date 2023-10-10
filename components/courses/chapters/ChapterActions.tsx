@@ -40,12 +40,30 @@ export const ChapterActions = ({
             setIsLoading(false);
         }
     };
+
+    const onPublishChapter = async () => {
+        try {
+            setIsLoading(true);
+
+            if (isPublished) {
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/unpublish`);
+                toast.success("Chapter Unpublished");
+            } else {
+                await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/publish`);
+                toast.success("Chapter Published successfully.");
+            }
+        } catch {
+            toast.error("Something went wrong. Please try again.")
+        } finally {
+            setIsLoading(false);
+        }
+    };
     return (
         <div className="flex items-center gap-x-2">
             <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {}}
+                onClick={onPublishChapter}
                 disabled={disabled || isLoading}
             >
                 {isPublished ? "Unpublish" : "Publish"}
