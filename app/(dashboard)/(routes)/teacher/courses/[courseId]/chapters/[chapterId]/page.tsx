@@ -12,6 +12,7 @@ import { ChapterDescriptionForm } from "@/components/courses/chapters/ChapterDes
 import { ChapterAccessSettingsForm } from "@/components/courses/chapters/ChapterAccessSettingsForm";
 import { ChapterVideoForm } from "@/components/courses/chapters/ChapterVideoForm";
 import { Banner } from "@/components/Banner";
+import { ChapterActions } from "@/components/courses/chapters/ChapterActions";
 
 const ChapterIdPage = async ({
     params,
