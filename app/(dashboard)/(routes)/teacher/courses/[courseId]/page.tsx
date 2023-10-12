@@ -78,7 +78,6 @@ const CourseIdPage = async ({
         {!course.isPublished && (
             <Banner 
                 label="This chapter is not published yet. Students won't be able to access it until you publish the course."
-                variant="warning"
             />
         )}
             <div className="p-6">
