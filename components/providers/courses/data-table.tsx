@@ -1,14 +1,15 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, 
   getCoreRowModel, getFilteredRowModel, useReactTable, getPaginationRowModel, getSortedRowModel } from "@tanstack/react-table"
+import { PlusSquare } from "lucide-react"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -42,7 +43,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Search course"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -51,6 +52,12 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <Link href="/teacher/create">
+          <Button>
+            <PlusSquare className="h-4 w-4 mr-2" />
+            Create Course
+          </Button>
+        </Link>
       </div>
       <div className="rounded-md border">
         <Table>
