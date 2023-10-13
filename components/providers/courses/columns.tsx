@@ -7,6 +7,8 @@ import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -36,11 +38,35 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price") || "0");
+      const formattedPrice = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+
+      return (
+        <p>{formattedPrice}</p>
+      );
+    },
   },
   {
     accessorKey: "isPublished",
     header: "Published",
+    cell: ({ row }) => {
+      const isPublished = row.getValue("isPublished") || false;
+
+      return (
+        <Badge className={cn("bg-slate-500",
+          isPublished && "bg-green-700",
+          !isPublished && "bg-rose-700"
+        )}>
+          {isPublished ? "Published" : "Draft"}
+        </Badge>
+      );
+    },
   },
+
   {
     id: "actions",
     cell: ({ row }) => {
