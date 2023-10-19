@@ -68,7 +68,7 @@ model Chapter {
   courseId   String      @db.ObjectId
   course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  userProgresses UserProgress[]
+  userProgress UserProgress[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt 
