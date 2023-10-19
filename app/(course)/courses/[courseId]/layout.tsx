@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { getProgress } from "@/actions/getProgress";
+import { CourseSidebar } from "@/components/course/CourseSidebar";
 
 const CourseLayout = async ({
     children,
