@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { getProgress } from "@/actions/getProgress";
+
 import { CourseSidebar } from "@/components/course/CourseSidebar";
 
 const CourseLayout = async ({
@@ -28,7 +29,7 @@ const CourseLayout = async ({
                     isPublished: true
                 },
                 include: {
-                    userProgresses: {
+                    userProgress: {
                         where: {
                             userId
                         }
