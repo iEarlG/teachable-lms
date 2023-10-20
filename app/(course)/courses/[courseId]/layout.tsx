@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getProgress } from "@/actions/getProgress";
 
 import { CourseSidebar } from "@/components/course/CourseSidebar";
+import { CourseNavbar } from "@/components/course/CourseNavbar";
 
 const CourseLayout = async ({
     children,
@@ -50,13 +51,19 @@ const CourseLayout = async ({
 
     return ( 
         <div className="h-full">
+            <div className="h-[80px] w-full md:pl-80 fixed inset-y-0 z-50">
+                <CourseNavbar 
+                    course={course}
+                    progressCount={progressCount}
+                />
+            </div>
             <div className="hidden md:flex flex-col fixed h-full w-80 inset-y-0 z-50">
                 <CourseSidebar 
                     course={course}
                     progressCount={progressCount}
                 />
             </div>
-            <main className="md:pl-80 h-full">
+            <main className="md:pl-80 h-full pt-[80px]">
                 {children}
             </main>
         </div>
