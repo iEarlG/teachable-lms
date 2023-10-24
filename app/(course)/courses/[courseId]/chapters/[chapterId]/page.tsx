@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import { getChapters } from "@/actions/getChapters";
+
+import { VideoHSLPlayer } from "@/components/course/chapters/VideoHSLPlayer";
 import { Banner } from "@/components/Banner";
 
 const ChapterIdPage = async ({
@@ -48,7 +50,7 @@ const ChapterIdPage = async ({
                     <VideoHSLPlayer 
                         title={chapter.title}
                         nextChapterId={nextChapter?.id}
-                        playbackId={muxData?.playbackId}
+                        playbackId={muxData?.playbackId!}
                         isLocked={isLocked}
                         completeOnEnd={completeOnEnd}
                         courseId={params.courseId}
