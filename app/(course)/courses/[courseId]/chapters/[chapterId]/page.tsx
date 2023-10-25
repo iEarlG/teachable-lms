@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 
 import { getChapters } from "@/actions/getChapters";
 
-import { VideoHSLPlayer } from "@/components/course/chapters/VideoHSLPlayer";
 import { Banner } from "@/components/Banner";
+import { VideoHSLPlayer } from "@/components/course/chapters/VideoHSLPlayer";
+import { CourseEnrollButton } from "@/components/course/chapters/CourseEnrollButton";
 
 const ChapterIdPage = async ({
     params
@@ -56,6 +57,21 @@ const ChapterIdPage = async ({
                         courseId={params.courseId}
                         chapterId={params.chapterId}
                     />
+                </div>
+                <div>
+                    <div className="flex flex-col md:flex-row items-center justify-between p-4">
+                        <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
+                        {purchase ? (
+                            <div>
+                                YES!
+                            </div>
+                        ): (
+                            <CourseEnrollButton 
+                                courseId={params.courseId}
+                                price={course.price!}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
