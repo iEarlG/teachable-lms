@@ -1,11 +1,14 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
+import { File } from "lucide-react";
 import { getChapters } from "@/actions/getChapters";
 
 import { Banner } from "@/components/Banner";
 import { VideoHSLPlayer } from "@/components/course/chapters/VideoHSLPlayer";
 import { CourseEnrollButton } from "@/components/course/chapters/CourseEnrollButton";
+import { Separator } from "@/components/ui/separator";
+import { Preview } from "@/components/Preview";
 
 const ChapterIdPage = async ({
     params
@@ -45,8 +48,7 @@ const ChapterIdPage = async ({
                     variant="warning"
                 />
             )}
-
-            <div className="flex flex-col max-w-4xl mx-auto pb-20">
+            <div className="flex flex-col max-w-full mx-auto pb-20">
                 <div className="p-4">
                     <VideoHSLPlayer 
                         title={chapter.title}
@@ -72,6 +74,30 @@ const ChapterIdPage = async ({
                             />
                         )}
                     </div>
+                    <Separator />
+                    <div>
+                        <Preview 
+                            value={chapter.description!}
+                        />
+                    </div>
+                    {!!attachments?.length && (
+                        <>
+                            <Separator />
+                            <div className="p-4">
+                                {attachments.map((attachment) => (
+                                    <a 
+                                        href={attachment.url} 
+                                        key={attachment.id} 
+                                        target="_blank"
+                                        className="flex items-center w-full p-3 bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                                    >
+                                        <File />
+                                        <p className="line-clamp-1">{attachment.name}</p>
+                                    </a>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
