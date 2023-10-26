@@ -5,6 +5,8 @@ import { Chapter, Course, UserProgress } from "@prisma/client";
 import { db } from "@/lib/db";
 
 import { CourseSidebarItems } from "@/components/course/CourseSidebarItems";
+import { CourseProgress } from "@/components/course/chapters/CourseProgress";
+
 
 interface CourseSidebarProps {
     course: Course & {
@@ -40,6 +42,14 @@ export const CourseSidebar = async ({
                 <h1 className="font-semibold">
                     {course.title}
                 </h1>
+                {purchase && (
+                    <div className="mt-10">
+                        <CourseProgress
+                            variant="success"
+                            value={progressCount}
+                        />
+                    </div>
+                )}
             </div>
             <div className="flex flex-col w-full">
                 {course.chapters.map((chapter) => (
