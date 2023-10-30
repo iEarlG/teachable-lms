@@ -5,10 +5,14 @@ import { File } from "lucide-react";
 import { getChapters } from "@/actions/getChapters";
 
 import { Banner } from "@/components/Banner";
+import { Preview } from "@/components/Preview";
+
 import { VideoHSLPlayer } from "@/components/course/chapters/VideoHSLPlayer";
 import { CourseEnrollButton } from "@/components/course/chapters/CourseEnrollButton";
+import { CourseProgressButton } from "@/components/course/chapters/CourseProgressButton";
+
 import { Separator } from "@/components/ui/separator";
-import { Preview } from "@/components/Preview";
+
 
 const ChapterIdPage = async ({
     params
@@ -64,9 +68,12 @@ const ChapterIdPage = async ({
                     <div className="flex flex-col md:flex-row items-center justify-between p-4">
                         <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
                         {purchase ? (
-                            <div>
-                                YES!
-                            </div>
+                            <CourseProgressButton 
+                                courseId={params.courseId}
+                                chapterId={params.chapterId}
+                                isCompleted={!!userProgress?.isCompleted}
+                                nextChapterId={nextChapter?.id}
+                            />
                         ): (
                             <CourseEnrollButton 
                                 courseId={params.courseId}
