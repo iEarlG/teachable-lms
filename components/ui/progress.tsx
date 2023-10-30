@@ -1,25 +1,25 @@
 "use client"
 
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+import * as React from "react";
+import * as ProgressPrimitive from "@radix-ui/react-progress";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
-import { VariantProps, cva } from "class-variance-authority"
+import { cn } from "@/lib/utils"; 
 
 const progressVariants = cva(
-  "h-full w-full bg-primary transition-all",
+  "h-full w-full flex-1 bg-primary transition-all",
   {
     variants: {
       variant: {
         default: "bg-sky-600",
-        success: "bg-emerald-600",
-      }
+        success: "bg-emerald-700",
+      },
     },
     defaultVariants: {
       variant: "default",
     }
   }
-);
+);  
 
 interface ProgressProps 
   extends React.HTMLAttributes<HTMLDivElement>,

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface CourseProgressProps {
     variant?: "success" | "default";
     value: number;
-    size?: "sm" | "default" | "md";
+    size?: "sm" | "default";
 };
 
 const colorByVaraint = {
@@ -15,7 +15,6 @@ const colorByVaraint = {
 const sizeByVaraint = {
     sm: "text-sm",
     default: "text-sm",
-    md: "text-md",
 };
 
 export const CourseProgress = ({
