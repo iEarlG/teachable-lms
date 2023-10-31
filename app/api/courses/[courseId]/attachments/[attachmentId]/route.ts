@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-import { isTeacher } from "@/lib/teacher";
 import { db } from "@/lib/db";
 
 export async function DELETE(
@@ -11,7 +10,7 @@ export async function DELETE(
     try {
         const { userId } = auth();
 
-        if (!userId || !isTeacher(userId)) {
+        if (!userId) {
             return new NextResponse("Unauthorized", {status: 401});
         }
 

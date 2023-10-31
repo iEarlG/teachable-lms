@@ -12,7 +12,7 @@ export async function PUT(
         const { userId } = auth();
         const { isCompleted } = await req.json();
 
-        if (!userId || !isTeacher(userId)) {
+        if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
