@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs";
 import { getAnalytics } from "@/actions/getAnalytics";
 
 import { AnalyticsDataCard } from "@/components/dashboard/analytics/AnalyticsDataCard";
+import { Chart } from "@/components/dashboard/analytics/Chart";
 
 const AnalyticsPage = async () => {
     const { userId } = auth();
@@ -27,6 +28,9 @@ const AnalyticsPage = async () => {
                     shouldFormat
                 />
             </div>
+            <Chart 
+                data={data}
+            />
         </div>
     );
 }
