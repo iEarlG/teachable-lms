@@ -1,1 +1,1 @@
-<h1>UNDER DEVELOPMENT</h1>
+IF YOU WANT TO TRY TO UPLOAD A COURSE JUST DM me on X (Twitter) https://twitter.com/itseaaarloffcl. Because I enable the teacher mode protection for this project only those selected user/s can create/delete a course. 
