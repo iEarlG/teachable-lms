@@ -37,16 +37,12 @@ export const getAnalytics = async (
         });
 
         const groupedEarnings = groupByCourse(purchases);
-
         const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
             name: courseTitle,
             total: total,
         }));
 
-        const totalRevenue = data.reduce((acc, curr) => {
-            return acc + curr.total;
-        }, 0);
-
+        const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
         const totalSales = purchases.length;
 
         return {
